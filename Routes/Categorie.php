@@ -12,9 +12,11 @@ if ($url_path1 == "categorie") {
         if ($url_path2 == "select_all") {
             $data["response"] = selectionner_categories();
             echo json_encode($data);
+            exit;
         } elseif ($url_path2 == "compter") {
             $data["response"] = compter_categories();
             echo json_encode($data);
+            exit;
         }
     } 
     // POST requests
@@ -22,15 +24,19 @@ if ($url_path1 == "categorie") {
         if ($url_path2 == "select_one") {
             $data["response"] = selectionner_une_categorie();
             echo json_encode($data);
+            exit;
         } elseif ($url_path2 == "enregistrer") {
             $data["response"] = enregistrer_categorie();
             echo json_encode($data);
+            exit;
         } elseif ($url_path2 == "modifier") {
             $data["response"] = modification_categorie();
             echo json_encode($data);
+            exit;
         } elseif ($url_path2 == "supprimer") {
             $data["response"] = supprimer_categorie();
             echo json_encode($data);
+            exit;
         }
     }
 }

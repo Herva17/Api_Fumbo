@@ -1,5 +1,5 @@
 <?php
-include("./Config.php");
+require_once("./Config.php");
 class Categorie
 {
     public $response = array();

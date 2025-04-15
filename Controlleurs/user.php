@@ -5,25 +5,25 @@ $retour = array();
 
 function save_user()
 {
-    $Username = isset($_POST["Username"]) ? htmlspecialchars(trim($_POST["Username"])) : null;
-    $Prenom = isset($_POST["Prenom"]) ? htmlspecialchars(trim($_POST["Prenom"])) : null;
-    $Email = isset($_POST["Email"]) ? htmlspecialchars(trim($_POST["Email"])) : null;
-    $Password = isset($_POST["Password"]) ? htmlspecialchars(trim($_POST["Password"])) : null;
-    $Bio = isset($_POST["Bio"]) ? htmlspecialchars(trim($_POST["Bio"])) : null;
-    $Id_Nationalite = isset($_POST["Id_Nationalite"]) ? htmlspecialchars(trim($_POST["Id_Nationalite"])) : null;
+    $Username = isset($_POST["username"]) ? htmlspecialchars(trim($_POST["username"])) : null;
+    $Prenom = isset($_POST["prenom"]) ? htmlspecialchars(trim($_POST["prenom"])) : null;
+    $Email = isset($_POST["email"]) ? htmlspecialchars(trim($_POST["email"])) : null;
+    $Password = isset($_POST["password"]) ? htmlspecialchars(trim($_POST["password"])) : null;
+    $Bio = isset($_POST["bio"]) ? htmlspecialchars(trim($_POST["bio"])) : null;
+   
 
     // Gestion de l'upload de l'image
-    if (isset($_FILES["Image"]) && $_FILES["Image"]["error"] == 0) {
+    if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
         $targetDir = "./uploads/users/"; // Dossier de destination
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
         }
 
-        $fileName = basename($_FILES["Image"]["name"]);
+        $fileName = basename($_FILES["image"]["name"]);
         $targetFilePath = $targetDir . $fileName;
 
         // Vérification et déplacement du fichier
-        if (move_uploaded_file($_FILES["Image"]["tmp_name"], $targetFilePath)) {
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
             $Image = $targetFilePath; // Enregistrer le chemin de l'image
         } else {
             $retour["Message"] = "Erreur lors du téléchargement de l'image.";
@@ -34,7 +34,7 @@ function save_user()
     }
 
     $Date_Inscription = date("Y-m-d H:i:s"); // Date actuelle
-
+    $Id_Nationalite = isset($_POST["id_nationalite"]) ? htmlspecialchars(trim($_POST["id_nationalite"])) : null;
     // Appel au modèle pour l'enregistrement
     return User::save($Username, $Prenom, $Email, $Password, $Bio, $Image, $Date_Inscription, $Id_Nationalite);
 }

@@ -7,14 +7,60 @@ class User
     public static function save($Username, $Prenom, $Email, $Password, $Bio, $Image, $Date_Inscription, $Id_Nationalite)
     {
         $data = get_connection();
-        if ($data->query("INSERT INTO users(username, prenom, email, password, bio, image, date_inscription, id_nationalite) 
-                          VALUES ('$Username', '$Prenom', '$Email', '$Password', '$Bio', '$Image', '$Date_Inscription', '$Id_Nationalite')")) {
-            $me["Reussite"] = "Utilisateur enregistré";
-            $me["Dernier_Enregistrement"] = self::get_last();
-            return $me;
+    
+        // Vérifier si l'id_nationalite existe dans la table nationalite
+        if ($Id_Nationalite !== null) {
+            $query = $data->prepare("SELECT * FROM nationalite WHERE id_nationalite = :id_nationalite");
+            $query->execute([':id_nationalite' => $Id_Nationalite]);
+            $nationalite = $query->fetch();
+    
+            if (!$nationalite) {
+                return [
+                    "Message" => "La nationalité spécifiée n'existe pas. Veuillez fournir un id_nationalite valide."
+                ];
+            }
+        }
+    
+        // Vérifier si l'email ou le nom d'utilisateur existe déjà
+        $query = $data->prepare("SELECT * FROM users WHERE email = :email OR username = :username");
+        $query->execute([
+            ':email' => $Email,
+            ':username' => $Username
+        ]);
+        $existingUser = $query->fetch();
+    
+        if ($existingUser) {
+            return [
+                "Message" => "L'email ou le nom d'utilisateur existe déjà. Veuillez en choisir un autre."
+            ];
+        }
+    
+        // Hachage du mot de passe
+        $hashedPassword = password_hash($Password, PASSWORD_BCRYPT);
+    
+        // Insérer le nouvel utilisateur
+        $query = $data->prepare("INSERT INTO users (username, prenom, email, password, bio, image, date_inscription, id_nationalite) 
+                                 VALUES (:username, :prenom, :email, :password, :bio, :image, :date_inscription, :id_nationalite)");
+        $success = $query->execute([
+            ':username' => $Username,
+            ':prenom' => $Prenom,
+            ':email' => $Email,
+            ':password' => $hashedPassword, // Utilisation du mot de passe haché
+            ':bio' => $Bio,
+            ':image' => $Image,
+            ':date_inscription' => $Date_Inscription,
+            ':id_nationalite' => $Id_Nationalite
+        ]);
+    
+        if ($success) {
+            return [
+                "Reussite" => "Utilisateur enregistré",
+                "Dernier_Enregistrement" => self::get_last()
+            ];
         } else {
-            $me["Message"] = "Echec d'enregistrement";
-            return $me;
+            return [
+                "Message" => "Echec d'enregistrement"
+            ];
         }
     }
 
