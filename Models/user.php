@@ -135,24 +135,26 @@ class User
         }
     }
 
-    public static function se_connecter($identifiant, $password)
+    public static function se_connecter($Identifiant, $Password)
     {
-        $data = get_connection();
-        $query = $data->prepare("SELECT * FROM users WHERE (email = :identifiant OR username = :identifiant) AND password = :password");
-        $query->execute([
-            ':identifiant' => $identifiant,
-            ':password' => $password
-        ]);
-        $user = $query->fetch();
-
-        if ($user) {
+        $pdo = get_connection();
+    
+        // Requête SQL pour vérifier l'utilisateur
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE (email = :identifiant OR username = :identifiant)");
+        $stmt->execute(['identifiant' => $Identifiant]);
+        $user = $stmt->fetch();
+    
+        // Vérifiez si l'utilisateur existe et si le mot de passe correspond
+        if ($user && password_verify($Password, $user['password'])) {
+            unset($user['password']); // Supprimez le mot de passe avant de retourner les données
             return [
-                "Message" => "Vous êtes connecté avec succès, monsieur " . $user['username']
-            ];
-        } else {
-            return [
-                "Message" => "Identifiants incorrects. Veuillez réessayer."
+                "Message" => "Connexion réussie",
+                "Utilisateur" => $user
             ];
         }
+    
+        return [
+            "Message" => "Identifiants incorrects. Veuillez réessayer."
+        ];
     }
 }

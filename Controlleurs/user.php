@@ -102,11 +102,42 @@ function compter_user()
 }
 
 // connexion
+
 function se_connecter()
 {
     $Identifiant = isset($_POST["Identifiant"]) ? htmlspecialchars(trim($_POST["Identifiant"])) : null;
     $Password = isset($_POST["Password"]) ? htmlspecialchars(trim($_POST["Password"])) : null;
 
+    // Vérification des champs requis
+    if (!$Identifiant || !$Password) {
+        return [
+            "me" => [
+                "Message" => "Veuillez fournir un identifiant (email ou nom d'utilisateur) et un mot de passe."
+            ]
+        ];
+    }
+
     // Appel au modèle pour vérifier les identifiants
-    return User::se_connecter($Identifiant, $Password);
+    $user = User::se_connecter($Identifiant, $Password);
+
+    if ($user && isset($user["Utilisateur"])) {
+        return [
+            "me" => [
+                "Reussite" => "Connexion réussie",
+                "Utilisateur" => $user["Utilisateur"]
+            ]
+        ];
+    } elseif ($user && isset($user["Message"])) {
+        return [
+            "me" => [
+                "Message" => $user["Message"]
+            ]
+        ];
+    } else {
+        return [
+            "me" => [
+                "Message" => "Identifiants incorrects. Veuillez réessayer."
+            ]
+        ];
+    }
 }
