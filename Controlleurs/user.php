@@ -105,8 +105,8 @@ function compter_user()
 
 function se_connecter()
 {
-    $Identifiant = isset($_POST["Identifiant"]) ? htmlspecialchars(trim($_POST["Identifiant"])) : null;
-    $Password = isset($_POST["Password"]) ? htmlspecialchars(trim($_POST["Password"])) : null;
+    $Identifiant = isset($_POST["email"]) ? htmlspecialchars(trim($_POST["email"])) : null;
+    $Password = isset($_POST["password"]) ? htmlspecialchars(trim($_POST["password"])) : null;
 
     // Vérification des champs requis
     if (!$Identifiant || !$Password) {

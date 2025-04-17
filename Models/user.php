@@ -140,9 +140,9 @@ class User
         $pdo = get_connection();
     
         // Requête SQL pour vérifier l'utilisateur
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE (email = :identifiant OR username = :identifiant)");
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :identifiant OR username = :identifiant");
         $stmt->execute(['identifiant' => $Identifiant]);
-        $user = $stmt->fetch();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC); // Utiliser PDO::FETCH_ASSOC pour éviter les index numériques
     
         // Vérifiez si l'utilisateur existe et si le mot de passe correspond
         if ($user && password_verify($Password, $user['password'])) {
