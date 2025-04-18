@@ -44,7 +44,7 @@ function modification_ouvrage()
 
     // Gestion de l'upload de l'image
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
-        $targetDir = "./uploads/ouvrages/"; // Dossier de destination
+        $targetDir = "../fumbo_Images/ouvrages/"; // Dossier de destination
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
         }

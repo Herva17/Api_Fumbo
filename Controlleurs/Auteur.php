@@ -52,7 +52,7 @@ function update_auteur()
 
     // Gestion de l'upload de l'image
     if (isset($_FILES["Image"]) && $_FILES["Image"]["error"] == 0) {
-        $targetDir = "./uploads/auteurs/"; // Dossier de destination
+        $targetDir = "../fumbo_Images/auteurs/"; // Dossier de destination
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
         }
