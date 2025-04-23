@@ -6,6 +6,7 @@ $url = explode('/', $_SERVER['REQUEST_URI']);
 //print_r($url);
 $url_path1 = $url[2];
 $url_path2 = $url[3];
+
 if ($url_path1 == "ouvrage") {
     // GET requests
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
