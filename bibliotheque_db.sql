@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 10 mars 2025 à 13:24
--- Version du serveur : 10.4.28-MariaDB
--- Version de PHP : 8.2.4
+-- Généré le : mer. 23 avr. 2025 à 14:21
+-- Version du serveur : 10.4.32-MariaDB
+-- Version de PHP : 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,7 @@ CREATE TABLE `auteur` (
 --
 
 INSERT INTO `auteur` (`id_auteur`, `nom_auteur`, `prenom_auteur`, `id_nationalite`, `image`) VALUES
-(6, 'Jean-pierre', 'de ROUSSEAU', 7, 'images/auteurs/hero.jpg');
+(9, 'IRAGI', 'Hervé', 22, 'hdghdghdgh.png');
 
 -- --------------------------------------------------------
 
@@ -60,7 +60,8 @@ CREATE TABLE `categorie` (
 INSERT INTO `categorie` (`id_categorie`, `nom_categorie`) VALUES
 (5, 'Theatre'),
 (6, 'Blague'),
-(7, 'Poeme');
+(7, 'Poeme'),
+(8, 'Education');
 
 -- --------------------------------------------------------
 
@@ -79,9 +80,9 @@ CREATE TABLE `nationalite` (
 --
 
 INSERT INTO `nationalite` (`id_nationalite`, `nom_nationalite`, `image`) VALUES
-(6, 'Anglaise', 'images/nationalites/profil0.jpg'),
-(7, 'Libanais', 'images/nationalites/profil3.jpg'),
-(8, 'Chinois', 'images/nationalites/profil2.jpg');
+(20, 'Congolaise', '../fumbo_Images/nationalites/about2.jpg'),
+(21, 'Congolaise', '../fumbo_Images/nationalites/about2.jpg'),
+(22, 'Chinoise', '../fumbo_Images/nationalites/CHOISIR.PNG');
 
 -- --------------------------------------------------------
 
@@ -95,16 +96,24 @@ CREATE TABLE `ouvrage` (
   `id_auteur` int(11) DEFAULT NULL,
   `id_categorie` int(11) DEFAULT NULL,
   `annee_publication` year(4) DEFAULT year(curdate()),
-  `image` text DEFAULT NULL
+  `image` text DEFAULT NULL,
+  `langue` varchar(50) NOT NULL,
+  `isbn` varchar(10) NOT NULL,
+  `resume` varchar(255) NOT NULL,
+  `format` varchar(50) NOT NULL,
+  `Nb_pages` int(11) NOT NULL,
+  `fichier_livre` varchar(255) NOT NULL,
+  `tags` text NOT NULL,
+  `datePub` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `ouvrage`
 --
 
-INSERT INTO `ouvrage` (`id_ouvrage`, `titre_ouvrage`, `id_auteur`, `id_categorie`, `annee_publication`, `image`) VALUES
-(4, 'J\'ai epouse une religieuse', 6, 7, '1999', 'images/ouvrages/her.jpg'),
-(5, 'J\'ai epouse une religieuse', 6, 7, NULL, 'images/ouvrages/her.jpg');
+INSERT INTO `ouvrage` (`id_ouvrage`, `titre_ouvrage`, `id_auteur`, `id_categorie`, `annee_publication`, `image`, `langue`, `isbn`, `resume`, `format`, `Nb_pages`, `fichier_livre`, `tags`, `datePub`) VALUES
+(7, 'Au bord de notre premiére rencontre', 9, 5, NULL, './uploads/ouvrages/about1.jpg', 'français', '1289094536', 'Ce livre parle de l&#039;histoire d&#039;une soeur ambicieuse', 'pdf', 54, './uploads/fichiers/academie1-1.pdf', 'JHSJDK', '2025-04-23 12:16:35'),
+(8, 'Au bord de notre premiére rencontre', 9, 5, NULL, '../fumbo_fichiers/ouvrages/about1.jpg', 'français', '1289094536', 'Ce livre parle de l&#039;histoire d&#039;une soeur ambicieuse', 'pdf', 54, '../fumbo_fichiers/fichiers/academie1-1.pdf', 'JHSJDK', '2025-04-23 12:16:45');
 
 -- --------------------------------------------------------
 
@@ -129,9 +138,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `username`, `prenom`, `email`, `password`, `bio`, `image`, `date_inscription`, `id_nationalite`) VALUES
-(5, 'Sapala', 'josue', 'sapala@gmail.com', '$2y$10$HtEpfGss8mzzlcVwXoWpEuNj4127V3ev9yPScoB88og2EQF.3FRwu', 'Une histoire nourrit ma sante mais une contes me forme mentalement.', 'images/users/client1.jpg', '2025-03-07 12:39:46', 8),
-(8, 'Iragi', 'Hervey', 'iragi@gmail.com', '$2y$10$8KrfViJyIpgroKBrkbciV./P.SvyvkJfCUMirx4P.6Id2jgdFFvEa', 'L\'afrique ecrira sa propre histoire, je suis conscient.', 'images/users/team2.jpg', '2025-03-07 13:09:11', 7),
-(9, 'thierry', 'nirere', 'nirer@gmail.com', '$2y$10$/Crz7MzlQ2toRGtknltii.Ib1GthdJ6FlkUIsu89h.sXuwVxByP9K', 'l\'afrique ecrira sa propre histoire', 'images/users/team3.jpg', '2025-03-08 11:12:07', 7);
+(84, 'JONATHAN', 'john', 'john@gmail.com', '$2y$10$gdcSkeszLZOPvNyY6cOCC.aw70OIXV8fgG/4X.U.xo83DvKpxwToO', 'Je suis john le pionier de la litterature ugandaise', './uploads/users/Ab1.PNG', '2025-04-22 12:34:12', 21);
 
 --
 -- Index pour les tables déchargées
@@ -180,31 +187,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `auteur`
 --
 ALTER TABLE `auteur`
-  MODIFY `id_auteur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_auteur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
 --
 ALTER TABLE `categorie`
-  MODIFY `id_categorie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_categorie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `nationalite`
 --
 ALTER TABLE `nationalite`
-  MODIFY `id_nationalite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_nationalite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT pour la table `ouvrage`
 --
 ALTER TABLE `ouvrage`
-  MODIFY `id_ouvrage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_ouvrage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- Contraintes pour les tables déchargées
@@ -227,7 +234,7 @@ ALTER TABLE `ouvrage`
 -- Contraintes pour la table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_nationalite`) REFERENCES `nationalite` (`id_nationalite`);
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_nationalite`) REFERENCES `nationalite` (`id_nationalite`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
