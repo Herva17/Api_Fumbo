@@ -4,14 +4,14 @@ class Ouvrage
 {
     public $response = array();
 
-    public static function enregistrer($titre_ouvrage, $id_auteur, $id_categorie, $annee_publication, $image, $langue, $isbn, $resume, $format, $Nb_pages, $fichier_livre, $tags)
+    public static function enregistrer($titre_ouvrage, $id_user, $id_categorie, $annee_publication, $image, $langue, $isbn, $resume, $format, $Nb_pages, $fichier_livre, $tags)
     {
         $data = get_connection();
-        $query = $data->prepare("INSERT INTO ouvrage (titre_ouvrage, id_auteur, id_categorie, annee_publication, image, langue, isbn, resume, format, Nb_pages, fichier_livre, tags) 
-                                 VALUES (:titre_ouvrage, :id_auteur, :id_categorie, :annee_publication, :image, :langue, :isbn, :resume, :format, :Nb_pages, :fichier_livre, :tags)");
+        $query = $data->prepare("INSERT INTO ouvrage (titre_ouvrage, id_user, id_categorie, annee_publication, image, langue, isbn, resume, format, Nb_pages, fichier_livre, tags) 
+                                 VALUES (:titre_ouvrage, :id_user, :id_categorie, :annee_publication, :image, :langue, :isbn, :resume, :format, :Nb_pages, :fichier_livre, :tags)");
         $success = $query->execute([
             ':titre_ouvrage' => $titre_ouvrage,
-            ':id_auteur' => $id_auteur,
+            ':id_user' => $id_user,
             ':id_categorie' => $id_categorie,
             ':annee_publication' => $annee_publication,
             ':image' => $image,
@@ -55,18 +55,18 @@ class Ouvrage
         }
     }
 
-    public static function update($id_ouvrage, $titre_ouvrage, $id_auteur, $id_categorie, $annee_publication, $image, $langue, $isbn, $resume, $format, $Nb_pages, $fichier_livre, $tags)
+    public static function update($id_ouvrage, $titre_ouvrage, $id_user, $id_categorie, $annee_publication, $image, $langue, $isbn, $resume, $format, $Nb_pages, $fichier_livre, $tags)
     {
         $data = get_connection();
         $query = $data->prepare("UPDATE ouvrage 
-                                 SET titre_ouvrage = :titre_ouvrage, id_auteur = :id_auteur, id_categorie = :id_categorie, 
+                                 SET titre_ouvrage = :titre_ouvrage, id_user = :id_user, id_categorie = :id_categorie, 
                                      annee_publication = :annee_publication, image = :image, langue = :langue, isbn = :isbn, 
                                      resume = :resume, format = :format, Nb_pages = :Nb_pages, fichier_livre = :fichier_livre, tags = :tags
                                  WHERE id_ouvrage = :id_ouvrage");
         $success = $query->execute([
             ':id_ouvrage' => $id_ouvrage,
             ':titre_ouvrage' => $titre_ouvrage,
-            ':id_auteur' => $id_auteur,
+            ':id_user' => $id_user,
             ':id_categorie' => $id_categorie,
             ':annee_publication' => $annee_publication,
             ':image' => $image,
