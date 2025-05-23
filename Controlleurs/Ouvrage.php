@@ -1,9 +1,9 @@
 <?php
 require_once("./Models/Ouvrage.php");
 $retour = array();
+
 function selectionner_ouvrages()
 {
-    // Appel au modèle pour récupérer tous les ouvrages
     $ouvrages = Ouvrage::select_all();
 
     if (isset($ouvrages["Message"])) {
@@ -28,7 +28,6 @@ function selectionner_un_ouvrage()
         ];
     }
 
-    // Appel au modèle pour récupérer un ouvrage spécifique
     $ouvrage = Ouvrage::select_one($id_ouvrage);
 
     if (isset($ouvrage["message"])) {
@@ -42,10 +41,11 @@ function selectionner_un_ouvrage()
         "Ouvrage" => $ouvrage
     ];
 }
+
 function enregistrer_ouvrage()
 {
     $titre_ouvrage = isset($_POST["titre_ouvrage"]) ? htmlspecialchars(trim($_POST["titre_ouvrage"])) : null;
-    $id_auteur = isset($_POST["id_auteur"]) ? htmlspecialchars(trim($_POST["id_auteur"])) : null;
+    $id_auteur = isset($_POST["id_user"]) ? htmlspecialchars(trim($_POST["id_user"])) : null;
     $id_categorie = isset($_POST["id_categorie"]) ? htmlspecialchars(trim($_POST["id_categorie"])) : null;
     $annee_publication = isset($_POST["annee_publication"]) ? htmlspecialchars(trim($_POST["annee_publication"])) : null;
     $langue = isset($_POST["langue"]) ? htmlspecialchars(trim($_POST["langue"])) : null;
@@ -57,47 +57,40 @@ function enregistrer_ouvrage()
 
     // Gestion de l'upload de l'image
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
-        $targetDir = "../fumbo_fichiers/ouvrages/"; // Dossier de destination
+        $targetDir = "../uploads/ouvrages/";
         if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
+            mkdir($targetDir, 0777, true);
         }
-
         $fileName = basename($_FILES["image"]["name"]);
         $targetFilePath = $targetDir . $fileName;
-
-        // Vérification et déplacement du fichier
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
-            $image = $targetFilePath; // Enregistrer le chemin de l'image
+            $image = $targetFilePath;
         } else {
             $retour["Message"] = "Erreur lors du téléchargement de l'image.";
             return $retour;
         }
     } else {
-        $image = null; // Pas d'image fournie
+        $image = null;
     }
 
     // Gestion de l'upload du fichier livre
     if (isset($_FILES["fichier_livre"]) && $_FILES["fichier_livre"]["error"] == 0) {
-        $targetDir = "../fumbo_fichiers/fichiers/"; // Dossier de destination
+        $targetDir = "../uploads/fichiers/";
         if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
+            mkdir($targetDir, 0777, true);
         }
-
         $fileName = basename($_FILES["fichier_livre"]["name"]);
         $targetFilePath = $targetDir . $fileName;
-
-        // Vérification et déplacement du fichier
         if (move_uploaded_file($_FILES["fichier_livre"]["tmp_name"], $targetFilePath)) {
-            $fichier_livre = $targetFilePath; // Enregistrer le chemin du fichier
+            $fichier_livre = $targetFilePath;
         } else {
             $retour["Message"] = "Erreur lors du téléchargement du fichier.";
             return $retour;
         }
     } else {
-        $fichier_livre = null; // Pas de fichier fourni
+        $fichier_livre = null;
     }
 
-    // Appel au modèle pour l'enregistrement
     return Ouvrage::enregistrer($titre_ouvrage, $id_auteur, $id_categorie, $annee_publication, $image, $langue, $isbn, $resume, $format, $Nb_pages, $fichier_livre, $tags);
 }
 
@@ -117,54 +110,45 @@ function modification_ouvrage()
 
     // Gestion de l'upload de l'image
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
-        $targetDir = "../fumbo_fichiers/ouvrages/"; // Dossier de destination
+        $targetDir = "../uploads/ouvrages/";
         if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
+            mkdir($targetDir, 0777, true);
         }
-
         $fileName = basename($_FILES["image"]["name"]);
         $targetFilePath = $targetDir . $fileName;
-
-        // Vérification et déplacement du fichier
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
-            $image = $targetFilePath; // Enregistrer le chemin de l'image
+            $image = $targetFilePath;
         } else {
             $retour["Message"] = "Erreur lors du téléchargement de l'image.";
             return $retour;
         }
     } else {
-        $image = null; // Pas de nouvelle image fournie
+        $image = null;
     }
 
     // Gestion de l'upload du fichier livre
     if (isset($_FILES["fichier_livre"]) && $_FILES["fichier_livre"]["error"] == 0) {
-        $targetDir = "../fumbo_fichiers/fichiers/"; // Dossier de destination
+        $targetDir = "../uploads/fichiers/";
         if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
+            mkdir($targetDir, 0777, true);
         }
-
         $fileName = basename($_FILES["fichier_livre"]["name"]);
         $targetFilePath = $targetDir . $fileName;
-
-        // Vérification et déplacement du fichier
         if (move_uploaded_file($_FILES["fichier_livre"]["tmp_name"], $targetFilePath)) {
-            $fichier_livre = $targetFilePath; // Enregistrer le chemin du fichier
+            $fichier_livre = $targetFilePath;
         } else {
             $retour["Message"] = "Erreur lors du téléchargement du fichier.";
             return $retour;
         }
     } else {
-        $fichier_livre = null; // Pas de nouveau fichier fourni
+        $fichier_livre = null;
     }
 
-    // Appel au modèle pour la modification
     return Ouvrage::update($id_ouvrage, $titre_ouvrage, $id_auteur, $id_categorie, $annee_publication, $image, $langue, $isbn, $resume, $format, $Nb_pages, $fichier_livre, $tags);
 }
 
-
 function compter_ouvrages()
 {
-    // Appel au modèle pour compter les ouvrages
     $compte = Ouvrage::CompterOuvrage();
 
     if (isset($compte["Message"])) {
@@ -179,6 +163,15 @@ function compter_ouvrages()
     ];
 }
 
+function select_ouvrage_by_categorie()
+{
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $id_categorie = isset($_POST["id_categorie"]) ? htmlspecialchars(trim($_POST["id_categorie"])) : null;
+    } else {
+        $id_categorie = isset($_GET["id_categorie"]) ? htmlspecialchars(trim($_GET["id_categorie"])) : null;
+    }
+    return Ouvrage::select_by_categorie($id_categorie);
+}
 
 function supprimer_ouvrage()
 {
@@ -190,7 +183,6 @@ function supprimer_ouvrage()
         ];
     }
 
-    // Appel au modèle pour supprimer l'ouvrage
     $resultat = Ouvrage::delete($id_ouvrage);
 
     if (isset($resultat["Reussite"])) {
@@ -202,4 +194,38 @@ function supprimer_ouvrage()
             "Message" => $resultat["Message"] ?? "Échec de la suppression de l'ouvrage."
         ];
     }
+}
+
+// --- FONCTIONS AJOUTÉES ---
+
+function afficher_livres()
+{
+    $livres = Ouvrage::afficheLivres();
+
+    if (isset($livres["Message"])) {
+        return [
+            "Message" => $livres["Message"]
+        ];
+    }
+
+    return [
+        "Reussite" => "Liste des livres affichée avec succès",
+        "Livres" => $livres
+    ];
+}
+
+function compter_livres_afficher()
+{
+    $compte = Ouvrage::compterLivresAfficher();
+
+    if (isset($compte["Message"])) {
+        return [
+            "Message" => $compte["Message"]
+        ];
+    }
+
+    return [
+        "Reussite" => "Nombre total de livres affichés récupéré avec succès",
+        "Total" => $compte["total"]
+    ];
 }

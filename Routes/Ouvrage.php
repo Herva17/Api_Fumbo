@@ -18,6 +18,14 @@ if ($url_path1 == "ouvrage") {
             $data["response"] = compter_ouvrages();
             echo json_encode($data);
             exit;
+        } elseif ($url_path2 == "afficher_livres") {
+            $data["response"] = afficher_livres();
+            echo json_encode($data);
+            exit;
+        } elseif ($url_path2 == "compter_livres_afficher") {
+            $data["response"] = compter_livres_afficher();
+            echo json_encode($data);
+            exit;
         }
     } 
     // POST requests
@@ -36,6 +44,10 @@ if ($url_path1 == "ouvrage") {
             exit;
         } elseif ($url_path2 == "supprimer") {
             $data["response"] = supprimer_ouvrage();
+            echo json_encode($data);
+            exit;
+        } elseif ($url_path2 == "by_categorie") {
+            $data["response"] = select_ouvrage_by_categorie();
             echo json_encode($data);
             exit;
         }

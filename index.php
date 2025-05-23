@@ -9,7 +9,7 @@ if ((isset($_GET['user']) && $_GET['user'] == 'herva' || isset($_GET['user']) &&
     && (isset($_GET['mdp']) && $_GET['mdp'] == "mdp" || isset($_GET['mdp']) && $_GET['mdp'] == $mdp)
 ) {
     require_once("Routes/Nationalite.php");
-    require_once("Routes/Auteur.php");
+    require_once("Routes/Histoire.php");
     require_once("Routes/user.php");
     require_once("Routes/Ouvrage.php");
     require_once("Routes/Categorie.php");

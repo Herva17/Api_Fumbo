@@ -113,7 +113,19 @@ class Ouvrage
             return $response;
         }
     }
-
+    public static function select_by_categorie($id_categorie)
+    {
+        $data = get_connection();
+        $query = $data->prepare("SELECT * FROM ouvrage WHERE id_categorie = :id_categorie");
+        $query->execute([':id_categorie' => $id_categorie]);
+        $donnees = $query->fetchAll(PDO::FETCH_ASSOC);
+        if (count($donnees) > 0) {
+            return $donnees;
+        } else {
+            $response["Message"] = "Aucune donnée disponible";
+            return $response;
+        }
+    }
     public static function delete($id_ouvrage)
     {
         $data = get_connection();
@@ -128,4 +140,53 @@ class Ouvrage
             return $response;
         }
     }
+
+    public static function afficheLivres()
+    {
+        $data = get_connection();
+        $sql = "SELECT 
+                ouvrage.id_ouvrage,
+                users.username,
+                users.prenom,
+                users.bio,
+                users.email,
+                users.image AS user_image,
+                nationalite.nom_nationalite,
+                categorie.nom_categorie,
+                ouvrage.titre_ouvrage,
+                ouvrage.annee_publication,
+                ouvrage.image AS ouvrage_image,
+                ouvrage.resume,
+                ouvrage.Nb_pages,
+                ouvrage.fichier_livre,
+                ouvrage.datePub
+            FROM users
+            INNER JOIN nationalite ON nationalite.id_nationalite = users.id_nationalite
+            INNER JOIN ouvrage ON users.id_user = ouvrage.id_user
+            INNER JOIN categorie ON categorie.id_categorie = ouvrage.id_categorie";
+        $donnees = $data->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        if (count($donnees) > 0) {
+            return $donnees;
+        } else {
+            $response["Message"] = "Aucune donnée disponible";
+            return $response;
+        }
+    }
+
+    public static function compterLivresAfficher()
+{
+    $data = get_connection();
+    $sql = "SELECT COUNT(*) as total
+            FROM users
+            INNER JOIN nationalite ON nationalite.id_nationalite = users.id_nationalite
+            INNER JOIN ouvrage ON users.id_user = ouvrage.id_user
+            INNER JOIN categorie ON categorie.id_categorie = ouvrage.id_categorie";
+    $donnees = $data->query($sql)->fetch(PDO::FETCH_ASSOC);
+    if ($donnees && isset($donnees['total'])) {
+        return $donnees;
+    } else {
+        $response["Message"] = "Aucune donnée disponible";
+        return $response;
+    }
+}
 }

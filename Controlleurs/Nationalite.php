@@ -9,7 +9,7 @@ function save_nationalite()
 
     // Gestion de l'upload de l'image
     if (isset($_FILES["Image"]) && $_FILES["Image"]["error"] == 0) {
-        $targetDir = "../fumbo_Images/nationalites/"; // Dossier de destination
+        $targetDir = "../uploads/nationalites/"; // Dossier de destination
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
         }
@@ -48,7 +48,7 @@ function update_nationalite()
 
     // Gestion de l'upload de l'image
     if (isset($_FILES["Image"]) && $_FILES["Image"]["error"] == 0) {
-        $targetDir = "./uploads/nationalites/"; // Dossier de destination
+        $targetDir = "../uploads/nationalites/"; // Dossier de destination
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true); // Créer le dossier s'il n'existe pas
         }
