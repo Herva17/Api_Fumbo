@@ -146,6 +146,7 @@ class Ouvrage
         $data = get_connection();
         $sql = "SELECT 
                 ouvrage.id_ouvrage,
+                ouvrage.id_user,
                 users.username,
                 users.prenom,
                 users.bio,

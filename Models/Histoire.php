@@ -3,10 +3,10 @@ require_once("./Config.php");
 class Histoire
 {
     // Ajout d'une histoire
-    public static function save($id_user, $categorie, $titre, $personnages_principaux, $description, $histoire, $image_couverture)
+    public static function save($id_user, $categorie, $titre, $personnages_principaux, $description, $histoire)
     {
         $data = get_connection();
-        if ($data->query("INSERT INTO histoires(id_user, categorie, titre, personnages_principaux, description, histoire, image_couverture) VALUES ('$id_user', '$categorie', '$titre', '$personnages_principaux', '$description', '$histoire', '$image_couverture')")) {
+        if ($data->query("INSERT INTO histoires(id_user, categorieId, titre, personnages_principaux, description, histoire) VALUES ('$id_user', '$categorie', '$titre', '$personnages_principaux', '$description', '$histoire')")) {
             $me["Reussite"] = "Histoire enregistrée";
             $me["Dernier_Enregistrement"] = self::get_last();
             return $me;
@@ -33,7 +33,7 @@ class Histoire
     public static function update($id_histoire, $id_user, $categorie, $titre, $personnages_principaux, $description, $histoire, $image_couverture)
     {
         $data = get_connection();
-        if ($data->query("UPDATE histoires SET id_user = '$id_user', categorie = '$categorie', titre = '$titre', personnages_principaux = '$personnages_principaux', description = '$description', histoire = '$histoire', image_couverture = '$image_couverture' WHERE id_histoire = '$id_histoire'")) {
+        if ($data->query("UPDATE histoires SET id_user = '$id_user', categorie = '$categorie', titre = '$titre', personnages_principaux = '$personnages_principaux', description = '$description', histoire = '$histoire' WHERE id_histoire = '$id_histoire'")) {
             $me["Reussite"] = "Modification réussie";
             return $me;
         } else {
@@ -100,4 +100,41 @@ class Histoire
             return $me;
         }
     }
+
+    public static function select_histoires_details()
+{
+    $data = get_connection();
+    $sql = "SELECT 
+                histoires.id_histoire,
+                histoires.id_user,
+                users.username,
+                users.prenom,
+                users.email,
+                users.bio,
+                users.image,
+                nationalite.nom_nationalite,
+                categorie.nom_categorie,
+                histoires.titre,
+                histoires.personnages_principaux,
+                histoires.description,
+                histoires.histoire,
+                histoires.date_creation
+            FROM 
+                users
+            INNER JOIN 
+                histoires ON users.id_user = histoires.id_user
+            INNER JOIN 
+                categorie ON categorie.id_categorie = histoires.categorieId
+            INNER JOIN 
+                nationalite ON nationalite.id_nationalite = users.id_nationalite
+            ORDER BY 
+                histoires.date_creation DESC";
+    $donnees = $data->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    if (count($donnees) > 0) {
+        return $donnees;
+    } else {
+        $me["Message"] = "Aucune donnée disponible";
+        return $me;
+    }
+}
 }

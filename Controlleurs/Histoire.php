@@ -6,33 +6,13 @@ $retour = array();
 function save_histoire()
 {
     $id_user = isset($_POST["id_user"]) ? htmlspecialchars(trim($_POST["id_user"])) : null;
-    $categorie = isset($_POST["categorie"]) ? htmlspecialchars(trim($_POST["categorie"])) : null;
+    $categorie = isset($_POST["categorieId"]) ? htmlspecialchars(trim($_POST["categorieId"])) : null;
     $titre = isset($_POST["titre"]) ? htmlspecialchars(trim($_POST["titre"])) : null;
     $personnages_principaux = isset($_POST["personnages_principaux"]) ? htmlspecialchars(trim($_POST["personnages_principaux"])) : null;
     $description = isset($_POST["description"]) ? htmlspecialchars(trim($_POST["description"])) : null;
     $histoire = isset($_POST["histoire"]) ? htmlspecialchars(trim($_POST["histoire"])) : null;
 
-
-    // Gestion de l'upload de l'image de couverture
-    if (isset($_FILES["image_couverture"]) && $_FILES["image_couverture"]["error"] == 0) {
-        $targetDir = "../uploads/histoires/";
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0777, true);
-        }
-        $fileName = basename($_FILES["image_couverture"]["name"]);
-        $targetFilePath = $targetDir . $fileName;
-        if (move_uploaded_file($_FILES["image_couverture"]["tmp_name"], $targetFilePath)) {
-            $image_couverture = $targetFilePath;
-        } else {
-            $retour["Message"] = "Erreur lors du téléchargement de l'image de couverture.";
-            return $retour;
-        }
-    } else {
-        $retour["Message"] = "Aucune image de couverture fournie ou erreur lors de l'upload.";
-        return $retour;
-    }
-
-    return Histoire::save($id_user, $categorie, $titre, $personnages_principaux, $description, $histoire, $image_couverture);
+    return Histoire::save($id_user, $categorie, $titre, $personnages_principaux, $description, $histoire);
 }
 
 // Suppression d'une histoire
@@ -47,32 +27,15 @@ function update_histoire()
 {
     $id_histoire = isset($_POST["id_histoire"]) ? htmlspecialchars(trim($_POST["id_histoire"])) : null;
     $id_user = isset($_POST["id_user"]) ? htmlspecialchars(trim($_POST["id_user"])) : null;
-    $categorie = isset($_POST["categorie"]) ? htmlspecialchars(trim($_POST["categorie"])) : null;
+    $categorie = isset($_POST["categorieId"]) ? htmlspecialchars(trim($_POST["categorieId"])) : null;
     $titre = isset($_POST["titre"]) ? htmlspecialchars(trim($_POST["titre"])) : null;
     $personnages_principaux = isset($_POST["personnages_principaux"]) ? htmlspecialchars(trim($_POST["personnages_principaux"])) : null;
     $description = isset($_POST["description"]) ? htmlspecialchars(trim($_POST["description"])) : null;
     $histoire = isset($_POST["histoire"]) ? htmlspecialchars(trim($_POST["histoire"])) : null;
     $date_creation = isset($_POST["date_creation"]) ? htmlspecialchars(trim($_POST["date_creation"])) : date("Y-m-d H:i:s");
 
-    // Gestion de l'upload de l'image de couverture
-    if (isset($_FILES["image_couverture"]) && $_FILES["image_couverture"]["error"] == 0) {
-        $targetDir = "../uploads/histoires/";
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0777, true);
-        }
-        $fileName = basename($_FILES["image_couverture"]["name"]);
-        $targetFilePath = $targetDir . $fileName;
-        if (move_uploaded_file($_FILES["image_couverture"]["tmp_name"], $targetFilePath)) {
-            $image_couverture = $targetFilePath;
-        } else {
-            $retour["Message"] = "Erreur lors du téléchargement de l'image de couverture.";
-            return $retour;
-        }
-    } else {
-        $image_couverture = null;
-    }
 
-    return Histoire::update($id_histoire, $id_user, $categorie, $titre, $personnages_principaux, $description, $histoire, $image_couverture, $date_creation);
+    return Histoire::update($id_histoire, $id_user, $categorie, $titre, $personnages_principaux, $description, $histoire, $date_creation);
 }
 
 // Sélection de toutes les histoires
@@ -100,4 +63,20 @@ function select_one_histoire()
 function compter_histoire()
 {
     return Histoire::compterHistoire();
+}
+
+function select_histoires_details()
+{
+    $histoires = Histoire::select_histoires_details();
+
+    if (isset($histoires["Message"])) {
+        return [
+            "Message" => $histoires["Message"]
+        ];
+    }
+
+    return [
+        "Reussite" => "Liste détaillée des histoires récupérée avec succès",
+        "Histoires" => $histoires
+    ];
 }

@@ -19,7 +19,11 @@ if ($url_path1 == "histoire") {
             $data["me"] = compter_histoire();
             echo json_encode($data);
             exit;
-        } 
+        } elseif ($url_path2 == "details") { // <-- Ajoute cette route
+            $data["me"] = select_histoires_details();
+            echo json_encode($data);
+            exit;
+        }
     }
     // POST requests
     elseif ($_SERVER["REQUEST_METHOD"] == "POST") {

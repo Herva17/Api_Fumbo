@@ -13,6 +13,7 @@ if ((isset($_GET['user']) && $_GET['user'] == 'herva' || isset($_GET['user']) &&
     require_once("Routes/user.php");
     require_once("Routes/Ouvrage.php");
     require_once("Routes/Categorie.php");
+    require_once("Routes/Abonnement.php");
 
     echo json_encode($retour);
     exit;
